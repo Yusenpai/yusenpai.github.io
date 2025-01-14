@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Yusenpai Blog</title>
+    <description>yusenpai blog, fork from Hux Blog</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Tue, 14 Jan 2025 15:30:07 +0700</pubDate>
+    <lastBuildDate>Tue, 14 Jan 2025 15:30:07 +0700</lastBuildDate>
+    <generator>Jekyll v4.3.4</generator>
+    
+      <item>
+        <title>Hello, 2025</title>
+        <description>&lt;p&gt;Xin chào mọi người 😊, đây là bài viết đầu tiên của mình. Chà, sau mấy ngày liên tục ngồi mò mấy cái &lt;a href=&quot;https://jekyllrb.com&quot;&gt;jekyll&lt;/a&gt; thì cuối cùng cũng có một cái blog “tạm bợ” để mình lảm nhảm về mấy chuyện cuộc sống cũng như mấy thứ mà mình thấy hay hay.&lt;/p&gt;
+
+&lt;h1 id=&quot;về-blog-này&quot;&gt;Về blog này&lt;/h1&gt;
+
+&lt;p&gt;Cái blog này mình fork về từ &lt;a href=&quot;https://github.com/Huxpro/huxpro.github.io&quot;&gt;huxpro&lt;/a&gt;, rồi ngồi lọ mọ chỉnh sửa đủ thứ (mình dốt html, css với js lắm 🥲), bug ra quá trời. Nói chung là vẫn còn nhiều thứ (đúng hơn là mình muốn sửa, chứ web của người ta đẹp quá trời rồi), về màu nè, layout nè, rồi xoá bớt mấy cái server workers (?) gì đi để khỏi rắc rối. Thời gian tới mình sẽ chăm mò hơn tí, thêm nhiều tính năng mới, tân trang lại cái web (chắc vậy 🤪).&lt;/p&gt;
+
+&lt;h1 id=&quot;về-nội-dung-của-blog&quot;&gt;Về nội dung của blog&lt;/h1&gt;
+
+&lt;p&gt;Trước mắt thì mình sẽ đăng thứ gì mình thấy hay thôi. Chẳng hạn chia sẻ về cuộc sống, những thứ mình đã trải nghiệm hoặc recap năm cũ chẳng hạn&lt;/p&gt;
+
+&lt;p&gt;À, mình là sinh viên ngành Kỹ thuật Máy tính nên cũng sẽ đăng mấy bài về kiến thức liên quan nữa.&lt;/p&gt;
+
+&lt;h1 id=&quot;lời-kết&quot;&gt;Lời kết&lt;/h1&gt;
+
+&lt;p&gt;Well, điều mình muốn nói chỉ tới đây thôi. Chúc các bạn một năm mới bình an nhé ☺️. Hẹn gặp lại 👋.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 14 Jan 2025 00:00:00 +0700</pubDate>
+        <link>http://localhost:4000/2025/01/14/hello-2025/</link>
+        <guid isPermaLink="true">http://localhost:4000/2025/01/14/hello-2025/</guid>
+        
+        <category>Meta</category>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
