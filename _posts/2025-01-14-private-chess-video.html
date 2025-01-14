@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chess Video Gallery</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 20px;
+		}
+
+		#video-container {
+			max-width: 640px;
+			margin: 0 auto;
+		}
+
+		button {
+			margin: 10px;
+			padding: 10px 20px;
+			font-size: 16px;
+		}
+
+		h2 {
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Chess Video Gallery</h1>
+	<h2 id="video-title">Loading...</h2>
+
+	<div id="video-container">
+		<!-- Video element -->
+		<video id="video-player" controls width="640" height="360">
+			<source id="video-source" src="" type="video/mp4">
+			<track id="subtitle-track" kind="subtitles" srclang="en" label="English" default>
+			Your browser does not support the video tag.
+		</video>
+	</div>
+
+	<!-- Navigation buttons -->
+	<div>
+		<button id="prev-button">Previous</button>
+		<button id="next-button">Next</button>
+	</div>
+
+	<script>
+		// Array of video categories
+		const categories = {
+			"New to Chess": [
+				{ title: "Moving and Capturing", video: "https://media.chesscomfiles.com/videos/square/NTC-capturing-g9d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/moving-and-capturing5d111044e3430.en_US.vtt" },
+				{ title: "Check", video: "https://media.chesscomfiles.com/videos/square/NTC-check-l2w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/check5d111054623ae.en_US.vtt" },
+				{ title: "Getting Out of Check", video: "https://media.chesscomfiles.com/videos/square/NTC-getting-out-of-check-u7x.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/getting-out-of-check5d11106177417.en_US.vtt" },
+				{ title: "Checkmate", video: "https://media.chesscomfiles.com/videos/square/NTC-checkmate-h2e.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/checkmate5d11106f5f2d0.en_US.vtt" },
+				{ title: "Fastest Checkmate", video: "https://media.chesscomfiles.com/videos/square/NTC-fastest-checkmates-v3c.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/fastest-checkmate5e565c842d54b.en_US.vtt" },
+				{ title: "Stalemate", video: "https://media.chesscomfiles.com/videos/square/NTC-stalemate-n3w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/stalemate5e5664a31de29.en_US.vtt" },
+				{ title: "Other Draws", video: "https://media.chesscomfiles.com/videos/square/NTC-drawing-u2d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/other-draws6551ee8adae17.en_US.vtt" },
+				{ title: "Castling", video: "https://media.chesscomfiles.com/videos/square/NTC-castling-a9s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/castling6051dde5f0639.en_US.vtt" },
+				{ title: "En Passant", video: "https://media.chesscomfiles.com/videos/square/NTC-en-passant-w0e.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/en-passant5e61f8d122e7d.en_US.vtt" },
+				{ title: "The Language of Chess", video: "https://media.chesscomfiles.com/videos/square/9-en-notation-z0v.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/the-language-of-chess5d11103720590.en_US.vtt" },
+				{ title: "Finding the Right Move", video: "https://media.chesscomfiles.com/videos/square/NTC-smart-moves-j2g.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/finding-the-right-move5d1110c493ba2.en_US.vtt" },
+				{ title: "Playing a Game", video: "https://media.chesscomfiles.com/videos/square/NTC-a-game-k1d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/a-master-chess-game5e61f9219246e.en_US.vtt" }
+			],
+			"Opening Principles": [
+				{ title: "Control the Center", video: "https://media.chesscomfiles.com/videos/square/ENG-control-the-center-f3x.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/control-the-center5dcbb1d4ad9af.en_US.vtt" },
+				{ title: "Develop Your Pieces", video: "https://media.chesscomfiles.com/videos/square/ENG-develop-your-pieces-b2s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/develop-your-pieces5e54d9bf759ec.en_US.vtt" },
+				{ title: "Protect Your King", video: "https://media.chesscomfiles.com/videos/square/ENG-protect-your-king-n1f.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/protect-your-king5e54dc16e2674.en_US.vtt" },
+				{ title: "Active Pieces", video: "https://media.chesscomfiles.com/videos/square/INT-active-pieces-G8f.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/active-pieces5d125307b287b.en_US.vtt" },
+				{ title: "Phases of the Game", video: "https://media.chesscomfiles.com/videos/square/BEG-phases-v2w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/phases-of-the-game5d11143945c28.en_US.vtt" }
+			]
+		};
+
+		const allVideos = [...categories["New to Chess"], ...categories["Opening Principles"]];
+		let currentIndex = 0;
+
+		// Load the initial video
+		function loadVideo(index) {
+			const videoPlayer = document.getElementById('video-player');
+			const videoSource = document.getElementById('video-source');
+			const subtitleTrack = document.getElementById('subtitle-track');
+			const videoTitle = document.getElementById('video-title');
+
+			videoSource.src = allVideos[index].video;
+			subtitleTrack.src = allVideos[index].subtitle;
+			videoTitle.textContent = allVideos[index].title;
+			videoPlayer.load();
+		}
+
+		// Event listeners for buttons
+		document.getElementById('prev-button').addEventListener('click', () => {
+			if (currentIndex > 0) {
+				currentIndex--;
+				loadVideo(currentIndex);
+			}
+		});
+
+		document.getElementById('next-button').addEventListener('click', () => {
+			if (currentIndex < allVideos.length - 1) {
+				currentIndex++;
+				loadVideo(currentIndex);
+			}
+		});
+
+		// Load the first video on page load
+		loadVideo(currentIndex);
+	</script>
+</body>
+
+</html>
