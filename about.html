@@ -9,11 +9,11 @@ multilingual: true
 
 {% include multilingual-sel.html %}
 
-<!-- Chinese Version -->
+{% comment %} <!-- Chinese Version -->
 <div class="zh post-container">
     {% capture about_zh %}{% include about/zh.md %}{% endcapture %}
     {{ about_zh | markdownify }}
-</div>
+</div> {% endcomment %}
 
 <!-- English Version -->
 <div class="en post-container">
