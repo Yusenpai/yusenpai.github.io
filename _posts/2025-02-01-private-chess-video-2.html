@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chess Video Gallery</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 20px;
+		}
+
+		#video-container {
+			max-width: 640px;
+			margin: 0 auto;
+		}
+
+		button {
+			margin: 10px;
+			padding: 10px 20px;
+			font-size: 16px;
+		}
+
+		h2 {
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Chess Video Gallery</h1>
+	<h2 id="category-title">Loading Category...</h2>
+	<h2 id="video-title">Loading Video...</h2>
+
+	<div id="video-container">
+		<!-- Video element -->
+		<video id="video-player" controls width="640" height="360">
+			<source id="video-source" src="" type="video/mp4">
+			<track id="subtitle-track" kind="subtitles" srclang="en" label="English" default>
+			Your browser does not support the video tag.
+		</video>
+	</div>
+
+	<!-- Navigation buttons -->
+	<div>
+		<button id="prev-button">Previous</button>
+		<button id="next-button">Next</button>
+	</div>
+
+	<script>
+		// Array of video categories
+			const categories = {
+				"Winning the Game": [
+					{ title: "The 4-Move Checkmate", video: "https://media.chesscomfiles.com/videos/square/BEG-4-move-checkmate-b3d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/the-4-move-checkmate5e579bc40f46c.en_US.vtt" },
+					{ title: "Assisted Checkmates", video: "https://media.chesscomfiles.com/videos/square/BEG-assisted-checkmate-c7v.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/assisted-checkmates5d11113a21e45.en_US.vtt" },
+					{ title: "Checkmate with Two Rooks", video: "https://media.chesscomfiles.com/videos/square/BEG-rook-roller-h0s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/checkmate-with-two-rooks5e579c1aad557.en_US.vtt" },
+					{ title: "Checkmate with the Queen", video: "https://media.chesscomfiles.com/videos/square/BEG-king-queen-checkmate-p1s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/checkmate-with-the-queen5e579c5c70550.en_US.vtt" },
+					{ title: "Checkmate with the Rook", video: "https://media.chesscomfiles.com/videos/square/BEG-king-rook-mate-w9j.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/checkmate-with-the-rook5d111171ce63f.en_US.vtt" }
+				],
+				"Capturing Pieces": [
+					{ title: "Value of the Pieces", video: "https://media.chesscomfiles.com/videos/square/BEG-material-value-h4f.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/value-of-the-pieces5d111186bfe55.en_US.vtt" },
+					{ title: "Tactics and Hanging Pieces", video: "https://media.chesscomfiles.com/videos/square/BEG-hanging-pieces-b1s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/tactics-and-hanging-pieces5d1111a1cd589.en_US.vtt" },
+					{ title: "Counting Captures", video: "https://media.chesscomfiles.com/videos/square/BEG-counting-m4n.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/counting-captures5e61f495ecc1f.en_US.vtt" },
+					{ title: "Forks", video: "https://media.chesscomfiles.com/videos/square/BEG-fork-g7t.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/forks5d1111c4a59e4.en_US.vtt" },
+					{ title: "Pins", video: "https://media.chesscomfiles.com/videos/square/30-pin-h1v.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/pins5d11126218056.en_US.vtt" },
+					{ title: "Piling Up", video: "https://media.chesscomfiles.com/videos/square/BEG-piling-up-b8x.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/piling-up5d11128c3ad77.en_US.vtt" },
+					{ title: "Skewers", video: "https://media.chesscomfiles.com/videos/square/BEG-skewers-s8u.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/skewers5d11129e4b02e.en_US.vtt" },
+					{ title: "Avoiding Bad Trades", video: "https://media.chesscomfiles.com/videos/square/BEG-bad-trades-e1q.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/avoiding-bad-trades5d234cbba6136.en_US.vtt" },
+					{ title: "Your Opponent's Move", video: "https://media.chesscomfiles.com/videos/square/ENG-opponents-moves-k3w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/your-opponents-move5e54dc9d57abb.en_US.vtt" }
+				]
+			};
+
+			// Flatten all categories into a single list of videos
+			const allVideos = Object.entries(categories).flatMap(([category, videos]) =>
+				videos.map(video => ({ ...video, category }))
+			);
+
+			let currentIndex = 0;
+
+			// Load the initial video
+			function loadVideo(index) {
+				const videoPlayer = document.getElementById('video-player');
+				const videoSource = document.getElementById('video-source');
+				const subtitleTrack = document.getElementById('subtitle-track');
+				const videoTitle = document.getElementById('video-title');
+				const categoryTitle = document.getElementById('category-title');
+
+				// Get current video
+				const currentVideo = allVideos[index];
+
+				// Update video and subtitles
+				videoSource.src = currentVideo.video;
+				subtitleTrack.src = currentVideo.subtitle;
+				videoTitle.textContent = currentVideo.title;
+				categoryTitle.textContent = currentVideo.category; // Update category title
+
+				videoPlayer.load();
+			}
+
+			// Event listeners for buttons
+			document.getElementById('prev-button').addEventListener('click', () => {
+				if (currentIndex > 0) {
+					currentIndex--;
+					loadVideo(currentIndex);
+				}
+			});
+
+			document.getElementById('next-button').addEventListener('click', () => {
+				if (currentIndex < allVideos.length - 1) {
+					currentIndex++;
+					loadVideo(currentIndex);
+				}
+			});
+
+			// Load the first video on page load
+			loadVideo(currentIndex);
+	</script>
+</body>
+
+</html>
