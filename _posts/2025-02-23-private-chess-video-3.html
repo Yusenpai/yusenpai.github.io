@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chess Video Gallery</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin: 20px;
+		}
+
+		#video-container {
+			max-width: 640px;
+			margin: 20px auto;
+		}
+
+		button {
+			margin: 10px;
+			padding: 10px 20px;
+			font-size: 16px;
+		}
+
+		h2,
+		h3 {
+			margin-bottom: 10px;
+		}
+
+		/* Table of Contents Styles */
+		#toc {
+			max-width: 640px;
+			margin: 0 auto 20px auto;
+			text-align: left;
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+
+		#toc h4 {
+			margin-top: 10px;
+		}
+
+		.toc-item {
+			cursor: pointer;
+			padding: 3px 5px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.toc-item:hover {
+			background-color: #f0f0f0;
+		}
+
+		.active {
+			background-color: #ddd;
+			font-weight: bold;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Chess Video Gallery</h1>
+
+	<!-- Table of Contents -->
+	<div id="toc">
+		<h2>Table of Contents</h2>
+	</div>
+
+	<h2 id="category-title">Loading...</h2>
+	<h3 id="video-title">Loading...</h3>
+
+	<div id="video-container">
+		<!-- Video element -->
+		<video id="video-player" controls width="640" height="360">
+			<source id="video-source" src="" type="video/mp4">
+			<track id="subtitle-track" kind="subtitles" srclang="en" label="English" default>
+			Your browser does not support the video tag.
+		</video>
+	</div>
+
+	<!-- Navigation buttons -->
+	<div>
+		<button id="prev-button">Previous</button>
+		<button id="next-button">Next</button>
+	</div>
+
+	<script>
+		// Video categories
+		const categories = {
+				"Finding Checkmate": [
+					{ title: "Pawn Race", video: "https://media.chesscomfiles.com/videos/square/BEG-pawn-races-f0r.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/pawn-race5d11140bdb5e0.en_US.vtt" },
+					{ title: "Back Rank Checkmates", video: "https://media.chesscomfiles.com/videos/square/BEG-back-rank-checkmate-n2s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/back-rank-checkmates5e5cd242e148b.en_US.vtt" },
+					{ title: "Weak Targets: f2 and f7", video: "https://media.chesscomfiles.com/videos/square/BEG-weak-squares-f2-f7-o3h.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/weak-targets-f2-and-f75d1113a5e221b.en_US.vtt" },
+					{ title: "King Safety", video: "https://media.chesscomfiles.com/videos/square/BEG-king-safety-k1q.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/king-safety5d9de9ed056c2.en_US.vtt" },
+					{ title: "Don't Just Check", video: "https://media.chesscomfiles.com/videos/square/BEG-dont-just-check-u7y.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/dont-just-check5e5cd2ae0f224.en_US.vtt" },
+					{ title: "Checkmate in 2 Moves", video: "https://media.chesscomfiles.com/videos/square/BEG-mate-in-2-j4c.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/checkmate-in-2-moves5d11141f771b6.en_US.vtt" }
+				],
+				"Intro to Book Openings": [
+					{ title: "1. e4 Openings for Beginners (White)", video: "https://media.chesscomfiles.com/videos/square/BEG-openings-for-white-1-e4-i5r.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/1-e4-openings-for-beginners-white5e5cd305708fa.en_US.vtt" },
+					{ title: "1. d4 Openings for Beginners (White)", video: "https://media.chesscomfiles.com/videos/square/BEG-openings-for-white-1-d4-q8w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/1-d4-openings-for-beginners-white5e5cd3720d685.en_US.vtt" },
+					{ title: "Intro to 1.e4 Defenses for Black (1...e5 and 1...c5)", video: "https://media.chesscomfiles.com/videos/square/43-en-defenses-to-1e4-1--e5-1--c5-w8d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/1-e4-openings-for-beginners-black5e5cd3f47591f.en_US.vtt" },
+					{ title: "Intro to 1.e4 Defenses for Black (1...e6, 1...c6, and 1...d5)", video: "https://media.chesscomfiles.com/videos/square/44-en-defenses-to-1e4-french-carokann-f4d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/intro-to-1-e4-defenses-for-black-1-e6-1-c6-and-1-d55e54d2cdf1df4.en_US.vtt" },
+					{ title: "1. d4 Openings for Beginners (Black)", video: "https://media.chesscomfiles.com/videos/square/BEG-defenses-to-1d4-1--d5-v8s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/1-d4-openings-for-beginners-black5e5cd4533bccb.en_US.vtt" }
+				],
+				"Make the Most of Your Pieces": [
+					{ title: "Using Your Knights", video: "https://media.chesscomfiles.com/videos/square/48-en-using-your-knights-f7s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-knights5d1253ad2ca6f.en_US.vtt" },
+					{ title: "Using Your Bishops", video: "https://media.chesscomfiles.com/videos/square/INT-using-your-bishops-v8s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-bishops5d1253b80005f.en_US.vtt" },
+					{ title: "Using Your Rooks", video: "https://media.chesscomfiles.com/videos/square/INT-using-your-rooks-d2n.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-rooks5d1253cbab4d6.en_US.vtt" },
+					{ title: "Using Your Queen", video: "https://media.chesscomfiles.com/videos/square/INT-using-your-queen-f8d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-queen5d1253d69f0d4.en_US.vtt" },
+					{ title: "Using Your King", video: "https://media.chesscomfiles.com/videos/square/INT-using-your-king-v4t.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-king5d1253e3a610b.en_US.vtt" },
+					{ title: "Using Your Pawns", video: "https://media.chesscomfiles.com/videos/square/INT-using-your-pawns-s9d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/using-your-pawns5d1253f1514a1.en_US.vtt" },
+					{ title: "Pieces Working Together", video: "https://media.chesscomfiles.com/videos/square/INT-pieces-working-together-r0s.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/pieces-working-together5e62014ce7a94.en_US.vtt" }
+				],
+				"Understanding Endgames": [
+					{ title: "Passed Pawns", video: "https://media.chesscomfiles.com/videos/square/INT-passed-pawns-y7d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/passed-pawns5d12540b09dc2.en_US.vtt" },
+					{ title: "Escort the Pawn", video: "https://media.chesscomfiles.com/videos/square/INT-escort-the-pawn-f3j.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/escort-the-pawn5e62019148c57.en_US.vtt" },
+					{ title: "Sacrificing to Promote", video: "https://media.chesscomfiles.com/videos/square/INT-sacrificing-to-promote-p2w.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/sacrificing-to-promote5d125425a6872.en_US.vtt" },
+					{ title: "3 v 3 Pawn Breakthrough", video: "https://media.chesscomfiles.com/videos/square/INT-3v3-pawn-breakthrough-e8r.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/3-v-3-pawn-breakthrough5d125431429ea.en_US.vtt" },
+					{ title: "Exchanging Down to a Win", video: "https://media.chesscomfiles.com/videos/square/58-en-trade-down-to-a-win-n3d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/exchanging-down-to-a-win5e62024d064cd.en_US.vtt" },
+					{ title: "Rule of the Square", video: "https://media.chesscomfiles.com/videos/square/INT-rule-of-the-square-f9d.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/rule-of-the-square5d1254e3ca984.en_US.vtt" },
+					{ title: "Creating a Passed Pawn", video: "https://media.chesscomfiles.com/videos/square/INT-creating-a-passed-pawn-b3f.mp4", subtitle: "https://media.chesscomfiles.com/subtitles/creating-a-passed-pawn5d1255029627e.en_US.vtt" }
+				]
+			};  
+
+		// Build an array of videos with category info
+		const allVideos = [];
+		Object.entries(categories).forEach(([category, videos]) => {
+			videos.forEach(video => {
+				allVideos.push({ ...video, category });
+			});
+		});
+
+		let currentIndex = 0;
+
+		// Function to load video at given index
+		function loadVideo(index) {
+			const videoPlayer = document.getElementById('video-player');
+			const videoSource = document.getElementById('video-source');
+			const subtitleTrack = document.getElementById('subtitle-track');
+			const videoTitle = document.getElementById('video-title');
+			const categoryTitle = document.getElementById('category-title');
+
+			videoSource.src = allVideos[index].video;
+			subtitleTrack.src = allVideos[index].subtitle;
+			videoTitle.textContent = allVideos[index].title;
+			categoryTitle.textContent = allVideos[index].category;
+			videoPlayer.load();
+
+			updateTOCActive(index);
+		}
+
+		// Function to update TOC highlighting for the current video
+		function updateTOCActive(index) {
+			document.querySelectorAll('.toc-item').forEach((item, i) => {
+				if (i === index) {
+					item.classList.add('active');
+				} else {
+					item.classList.remove('active');
+				}
+			});
+		}
+
+		// Build Table of Contents dynamically
+		function buildTOC() {
+			const tocDiv = document.getElementById('toc');
+			// Clear any existing content except the heading
+			tocDiv.innerHTML = '<h2>Table of Contents</h2>';
+
+			Object.entries(categories).forEach(([category, videos]) => {
+				const categoryHeader = document.createElement('h4');
+				categoryHeader.textContent = category;
+				tocDiv.appendChild(categoryHeader);
+
+				videos.forEach(video => {
+					const tocItem = document.createElement('div');
+					tocItem.className = 'toc-item';
+					tocItem.textContent = video.title;
+					tocItem.addEventListener('click', () => {
+						// Calculate the overall index for the selected video
+						const index = allVideos.findIndex(v => v.title === video.title && v.category === category);
+						if (index !== -1) {
+							currentIndex = index;
+							loadVideo(currentIndex);
+						}
+					});
+					tocDiv.appendChild(tocItem);
+				});
+			});
+		}
+
+		// Navigation buttons events
+		document.getElementById('prev-button').addEventListener('click', () => {
+			if (currentIndex > 0) {
+				currentIndex--;
+				loadVideo(currentIndex);
+			}
+		});
+
+		document.getElementById('next-button').addEventListener('click', () => {
+			if (currentIndex < allVideos.length - 1) {
+				currentIndex++;
+				loadVideo(currentIndex);
+			}
+		});
+
+		// Initialize TOC and load first video on page load
+		buildTOC();
+		loadVideo(currentIndex);
+	</script>
+</body>
+
+</html>
